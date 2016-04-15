@@ -1,0 +1,73 @@
+<include file="Public:HEAD"/>
+<!-- BEGIN PAGE CONTENT-->
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN SAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>系统信息
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config">
+                    </a>
+                    <a href="javascript:;" class="reload">
+                    </a>
+                    <a href="" class="fullscreen">
+                    </a>
+                    <a href="javascript:;" class="remove">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-hover">
+                    <tbody>
+                    <tr>
+                        <th class="col-md-2">服务器域名 / IP：</td>
+                        <td class="col-md-4">{$sysInfo.serverDomain}</td>
+                        <th class="col-md-2">系统版本：</td>
+                        <td class="col-md-4">version 1.0</td>
+                    </tr>
+                    <tr>
+                        <th>服务器操作系统：</td>
+                        <td>{$sysInfo.systemOS}</td>
+                        <th>Web 服务器：</td>
+                        <td>{$sysInfo.webServer}</td>
+                    </tr>
+                    <tr>
+                        <th>PHP 版本：</td>
+                        <td>{$sysInfo.phpVersion}</td>
+                        <th>MySQL 版本：</td>
+                        <td>{$sysInfo.mysqlVersion}</td>
+                    </tr>
+                    <tr>
+                        <th>文件上传限制：</td>
+                        <td>{$sysInfo.uploadMaxFileSize}</td>
+                        <th>执行时间限制：</td>
+                        <td>{$sysInfo.maxExecutionTime}</td>
+                    </tr>
+                    <tr>
+                        <th>安全模式：</td>
+                        <td>{$sysInfo.safe_mode}</td>
+                        <th>zlib 支持：</td>
+                        <td>{$sysInfo.zlib}</td>
+                    </tr>
+                    <tr>
+                        <th>CURL 支持：</td>
+                        <td>{$sysInfo.curl}</td>
+                        <th>时区设置：</td>
+                        <td>{$sysInfo.timezone}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END SAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<!-- END PAGE CONTENT-->
+<include file="Public:FOOTER"/>

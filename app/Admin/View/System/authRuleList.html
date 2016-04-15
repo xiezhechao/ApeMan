@@ -1,0 +1,114 @@
+<include file="Public:HEAD"/>
+<!-- BEGIN PAGE CONTENT-->
+<style>
+    .mr {margin-right: 10px;}
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN SAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>系统信息
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config">
+                    </a>
+                    <a href="javascript:;" class="reload">
+                    </a>
+                    <a href="" class="fullscreen">
+                    </a>
+                    <a href="javascript:;" class="remove">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>菜单名称</th>
+                            <th>规则</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="list" id="vo">
+                            <tr data-pid="{$vo.pid}" data-id="{$vo.id}">
+                                <td>
+                                    <php>
+                                        for ($i = 0; $i < $vo['level'] - 1; $i++) {
+                                            echo '<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+                                        }
+                                        $menu = menu($vo['id'],1);
+                                    </php>
+                                    <if condition="count($menu) gt 0">
+                                        <i id="toggle-i-{$vo.id}" class="glyphicon glyphicon-minus" style="cursor: pointer;" onclick="toggleMenu({$vo['id']})"></i>
+                                        <else/>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </if>
+                                    {$vo.title}
+                                </td>
+                                <td>{$vo.name}</td>
+                                <td>
+                                    <a><i class="glyphicon glyphicon-plus" title="添加子菜单" style="color: #4FB6AF;"></i></a>
+                                    <span class="mr"></span>
+                                    <a><i class="glyphicon glyphicon-edit" title="编辑" style="color: #8CC3F9;"></i></a>
+                                    <span class="mr"></span>
+                                    <a><i class="glyphicon glyphicon-remove" title="删除" style="color: #EE585A;"></i></a>
+                            </tr>
+                            <if></if>
+                        </volist>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END SAMPLE TABLE PORTLET-->
+    </div>
+
+</div>
+<!-- END PAGE CONTENT-->
+<include file="Public:FOOTER"/>
+
+<script>
+    function toggleMenu (id) {
+        var $tr = $('tr[data-pid=' + id + ']');
+        var obj = $('#toggle-i-' + id);
+        if ($tr.length == 0) {
+            return;
+        }
+        var type = 0;
+        if ($tr.is(':hidden')) {
+            $tr.show();
+            $(obj).removeClass().addClass('glyphicon glyphicon-minus');
+            type = 1;
+        } else {
+            $tr.hide();
+            $(obj).removeClass().addClass('glyphicon glyphicon-plus');
+            $tr.each(function () {
+                var now_id = $(this).data('id');
+                subToggleMenu(now_id,type);
+            });
+        }
+
+    }
+
+    function subToggleMenu (id, type) {
+        var $tr = $('tr[data-pid=' + id + ']');
+        var obj = $('#toggle-i-' + id);
+        if ($tr.length == 0) {
+            return;
+        }
+        if (type == 1) {
+            $tr.show();
+            $(obj).removeClass().addClass('glyphicon glyphicon-minus');
+        } else {
+            $tr.hide();
+            $(obj).removeClass().addClass('glyphicon glyphicon-plus');
+        }
+        $tr.each(function() {
+            var now_id = $(this).data('id');
+            subToggleMenu(now_id,type);
+        });
+    }
+</script>
