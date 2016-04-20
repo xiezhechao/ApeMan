@@ -11,4 +11,7 @@ namespace Home\Controller;
 
 class TestController {
 
+    public function index () {
+
+    }
 }
