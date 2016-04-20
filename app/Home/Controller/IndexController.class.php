@@ -6,8 +6,7 @@ class IndexController extends Controller {
         $this->display();
     }
     public function test () {
-        echo 1-1;
-        echo 2;
+        echo 'test';
         $this->display();
     }
 }
