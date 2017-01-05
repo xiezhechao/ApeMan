@@ -1,4 +1,5 @@
 <?php
+
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
@@ -35,8 +36,6 @@ define('RUNTIME_PATH', SYS_DATA_PATH . 'runtime/');
 define('THINK_PATH', SYS_DATA_PATH . 'core/');
 //项目目录
 define('ROOT_PATH', dirname(__FILE__));
-// 绑定Home模块到当前入口文件
-define('BIND_MODULE','Home');
 // 引入ThinkPHP入口文件
 require THINK_PATH.'ThinkPHP.php';
 

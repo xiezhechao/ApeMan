@@ -12,6 +12,8 @@ namespace Admin\Controller;
 class SystemController extends CommonController {
 
     public function core () {
+        
+
         $this->display();
     }
 

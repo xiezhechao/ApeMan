@@ -112,4 +112,23 @@ class CommonController extends Controller {
         return $list;
     }
 
+    public function curl_post($url, $fields = array()) {
+        // 初始化一个 cURL 对象
+        $ch = curl_init();
+        // 设置你需要抓取的URL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // 设置header
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        // 设置cURL 参数，要求结果保存到字符串中还是输出到屏幕上。
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_INFILESIZE,2);
+        // 运行cURL，请求网页
+        $return_data = curl_exec($ch);
+        // 关闭URL请求
+        curl_close($ch);
+        return $return_data;
+    }
+
 }
