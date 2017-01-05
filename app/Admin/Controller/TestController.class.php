@@ -17,7 +17,7 @@ class TestController extends CommonController {
 
     public function receive () {
         ob_start();
-        echo 222111;
+        echo 2221121;
         ob_end_flush();
         exit;
     }
