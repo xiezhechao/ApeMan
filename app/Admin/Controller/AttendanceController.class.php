@@ -9,111 +9,96 @@
 namespace Admin\Controller;
 
 
+use Think\Page;
+
 class AttendanceController extends CommonController{
 
-    public function index() {
+    private $work_time = "09:00";
 
+    private $time_from_work = "17:30";
+
+    private $over_time_start_time = "18:30";
+
+    public function index() {
+        $params = array();
         $where = array();
-        $from = $_POST['from'];
+        $p = isset($_GET["p"]) ? $_GET["p"] : 1;
+        if ($_GET["listrows"]) {
+            $listrows = intval($_GET["listrows"]);
+            $params['listrows'] = intval($_GET["listrows"]);
+        } else {
+            $listrows = 10;
+            $params["listrows"] = 10;
+        }
+
+        $from = $_REQUEST['from'];
         if ($from) {
-            $where[] = "date_id >= ".date('Ymd',strtotime($from));
+            $where[] = "dim_date.date_id >= ".date('Ymd',strtotime($from));
+            $params['from'] = $from;
         }
-        $to = $_POST['to'];
+        $to = $_REQUEST['to'];
         if ($to) {
-            $where[] = "date_id <= ".date('Ymd',strtotime($to));
+            $where[] = "dim_date.date_id <= ".date('Ymd',strtotime($to));
+            $params['to'] = $to;
         }
-        $user = $_POST['user'];
-        $userName = $_POST['userName'];
+        $user = $_REQUEST['user'];
+        $userName = $_REQUEST['userName'];
         if ($user) {
-            $where[] = "t2.number = ".$user;
+            $where[] = "company_user.number = ".$user;
+            $params['user'] = $user;
         } elseif ($userName) {
-            $where[] = "t2.name LIKE '%".$userName."%'";
+            $where[] = "company_user.name LIKE '%".$userName."%'";
+            $params['userName'] = $userName;
         }
 
         if (!$from && !$to) {
-            $where[] = "date_id >= ".getFirstDayForMonth(strtotime('2016-06-01'));
-            $where[] = "date_id <= ".getLastDayForMonth(time());
+            $where[] = "dim_date.date_id >= ".date("Ym01", strtotime("last month"));
+            $where[] = "dim_date.date_id <= ".date("Ymt", strtotime("last month"));
+            $_REQUEST['from'] = date("Y-m-01", strtotime("last month"));
+            $_REQUEST['to'] = date("Y-m-t", strtotime("last month"));
         }
 
         $where[] = 'hiredate <= date_id';
-        $where[] = 'departure_date >= date_id';
-
-        if ($where) {
-            $where = ' WHERE '.join(' AND ',$where);
-        } else {
-            $where = '';
-        }
+        $where[] = 'departure_date = 0 OR departure_date >= date_id';
 
         $reback = array();
-        $reback['from'] = $_POST['from'];
-        $reback['to'] = $_POST['to'];
-        $reback['user'] = $_POST['user'];
-        $reback['userName'] = $_POST['userName'];
+        $reback['from'] = $_REQUEST['from'];
+        $reback['to'] = $_REQUEST['to'];
+        $reback['user'] = $_REQUEST['user'];
+        $reback['userName'] = $_REQUEST['userName'];
         $this->assign('reback',$reback);
 
         $u = M('user','company_');
         $users = $u->select();
         $this->assign('users',$users);
 
-        $m = M();
-        $sql = "SELECT date_id AS `date`, week_name, t.number, `name`, wage, start_time, end_time, is_holiday FROM (SELECT t1.date_id, t1.week_name, t2.number, t2.name, t2.wage, t1.`is_holiday`, t2.`hiredate`, t2.`departure_date` FROM dim_date AS t1, company_user AS t2 ".$where."
-) t LEFT JOIN company_attendance AS t3 ON t.number = t3.number AND t.date_id = t3.date
-ORDER BY t.date_id, t.number ASC";
-        $list = $m->query($sql);
-        $total = array('hours'=>0);
-        $late = 0;
-        $deductions = 0;
-        foreach ($list as $k => $v) {
-            $status = '';
-            if ($v['is_holiday']) {
-                $status .= '公休';
-                if ($v['start_time'] > 0 && $v['end_time'] > 0) {
-                    $h = ($v['end_time'] - $v['start_time']) / 60 / 60;
-                    $list[$k]['overtimeHours'] = round($h,1) . '[节假日]';
-                    $total['hours'] += $list[$k]['overtimeHours'];
-                    $status .= ',加班';
-                }
-            } else {
-                $time = intval(date('H',$v['end_time']));
-
-                if ($time >= 19 || ($time == 18 && intval(date('i',$v['end_time'])) >= 30)) {
-                    $status .= '加班';
-                    $s = strtotime($v['date'].' 17:30:00');
-                    $h = ($v['end_time'] - $s) / 60 / 60 ;
-                    $list[$k]['overtimeHours'] = round($h,1);
-                    $total['hours'] += $list[$k]['overtimeHours'];
-                }
-                $morning = strtotime($v['date'].' 9:01:00');
-                if ($v['start_time'] > 0) {
-                    $t = $v['start_time'] - $morning;
-                    if ($t > 0) {
-                        $status .= ' 迟到';
-                        if ($t < 60 * 10) {
-                            $deductions += 5;
-                        } elseif ($t < 15 * 60) {
-                            $deductions += 10;
-                        } elseif ($t < 20 * 60) {
-                            $deductions += 15;
-                        } elseif ($t < 30 * 60) {
-                            $deductions += 20;
-                        } else {
-                            $deductions += $v['wage'] / 21.75 / 2;
-                        }
-                        $late++;
-                    }
-                }
-                if (!$v['start_time'] && !$v['end_time']) {
-                    $status = ' 旷工';
-                }
-            }
-            $list[$k]['status'] = $status;
-            $list[$k]['date'] = date('Y/m/d',strtotime($v['date']));
+        $m_dim_date = M("date", "dim_");
+        $list = $m_dim_date->join("company_user")->join("company_attendance ON company_user.number = company_attendance.number AND dim_date.date_id = company_attendance.date","LEFT")->where($where)->field("dim_date.date_id AS `date`, dim_date.week_name, company_user.number, company_user.name, company_user.wage, company_attendance.start_time, company_attendance.end_time, dim_date.is_holiday, overtime_hours, holiday_name")->order("dim_date.date_id, company_user.number ASC")->page($p.",".$listrows)->select();
+        $count = $m_dim_date->join("company_user")->join("company_attendance ON company_user.number = company_attendance.number AND dim_date.date_id = company_attendance.date","LEFT")->where($where)->count();
+        $Page = new Page($count, $listrows);
+        if (!empty($_GET['by'])) {
+            $params[] = 'by='.trim($_GET['by']);
         }
-        $this->assign('late',$late);
-        $this->assign('dedu',round($deductions,2));
-        $this->assign("total",$total);
+        if ($_GET['desc_order']) {
+            $params[] = "desc_order=" . trim($_GET['desc_order']);
+        } elseif($_GET['asc_order']){
+            $params[] = "asc_order=" . trim($_GET['asc_order']);
+        }
+        $Page->parameter = $params;
+        $this->assign('page', $Page->show());
         $this->assign("list",$list);
-        $this->display();
+
+        $total_overtime_hours = $m_dim_date->join("company_user")->join("company_attendance ON company_user.number = company_attendance.number AND dim_date.date_id = company_attendance.date","LEFT")->where($where)->sum("overtime_hours");
+        $this->assign("total_overtime_hours", $total_overtime_hours);
+
+        $late_where = array_merge($where,
+            array(
+                "dim_date.is_holiday = 0",
+                "start_time > UNIX_TIMESTAMP(CONCAT(dim_date.date_name, ' ".$this->work_time."'))" ,
+            ));
+        $total_late_count = $m_dim_date->join("company_user")->join("company_attendance ON company_user.number = company_attendance.number AND dim_date.date_id = company_attendance.date","LEFT")->where($late_where)->count();
+        $this->assign("total_late_count", $total_late_count);
+        $this->display("index");
     }
 
     public function importExcel() {
@@ -123,7 +108,7 @@ ORDER BY t.date_id, t.number ASC";
         $dir = 'data/uploads/';
 
         if ($_FILES[$name]["error"] > 0) {
-            echo "Return Code: " . $_FILES[$name]["error"] . "<br />";
+            $this->error(fileErrorInfo($_FILES[$name]["error"]));
         } else {
             move_uploaded_file($_FILES[$name]["tmp_name"],
                 $dir . $_FILES[$name]["name"]);
@@ -134,7 +119,7 @@ ORDER BY t.date_id, t.number ASC";
         $this->loadExcel2Data($filePath);
         $this->reloadData();
 
-        $this->display('index');
+        $this->success("考勤导入成功");
     }
 
     //从EXCEL导入数据库临时表
@@ -150,7 +135,7 @@ ORDER BY t.date_id, t.number ASC";
     private function reloadData () {
         $m = M();
         $m->execute("TRUNCATE `company_attendance`");
-        $sql = "INSERT INTO company_attendance (number, start_time, end_time, `date`)
+        $sql = "INSERT INTO company_attendance (number, start_time, end_time, `date`, `overtime_hours`)
 SELECT t1.number,
 CASE WHEN t1.time = t2.time AND 12 < CAST(FROM_UNIXTIME(t1.time, '%H') AS SIGNED) THEN 0
 ELSE t1.time
@@ -158,12 +143,20 @@ END AS start_time,
 CASE WHEN t2.time = t1.time AND 12 > CAST(FROM_UNIXTIME(t2.time, '%H') AS SIGNED) THEN 0
 ELSE t2.time
 END AS end_time,
-t1.date FROM (
-SELECT number, `time`, `date` FROM `company_attendance_log` GROUP BY number, `DATE` ORDER BY `TIME` ASC
+t1.date,
+CASE
+WHEN t3.`is_holiday` = 0 AND t2.time > UNIX_TIMESTAMP(CONCAT(t3.date_name, ' ".$this->over_time_start_time."'))
+THEN ROUND((t2.time - UNIX_TIMESTAMP(CONCAT(t3.date_name, ' .".$this->time_from_work."'))) / 60 / 60, 1)
+WHEN t3.`is_holiday` = 1 AND t1.time > 0 AND t2.time > 0
+THEN ROUND((t2.time - t1.time) / 60 / 60, 1)
+ELSE 0
+END AS overtime_hours
+FROM (
+SELECT number, `time`, `date` FROM `company_attendance_log` GROUP BY number, `DATE` ORDER BY `TIME` ASC LIMIT 100000
 ) t1 LEFT JOIN (
 SELECT number, `time`, `date` FROM
 (SELECT number, `time`, `date` FROM `company_attendance_log` ORDER BY `TIME` DESC) tmp GROUP BY number, `DATE` ORDER BY `TIME` ASC
-) t2 ON t1.number = t2.number AND t1.date = t2.date";
+) t2 ON t1.number = t2.number AND t1.date = t2.date JOIN dim_date t3 ON t1.date = t3.date_id";
         $m->execute($sql);
     }
 

@@ -2,19 +2,29 @@
 <!-- BEGIN PAGE CONTENT-->
 
 <div class="row">
-    <div class="col-md-12">
-        <!-- BEGIN SAMPLE TABLE PORTLET-->
-
-        <iframe src="test.html"></iframe>
-        <a id="parentPageContent">父页面</a>
-
-        <!-- END SAMPLE TABLE PORTLET-->
+    <div class="form-group">
+        <label class="control-label col-md-3">Default Datepicker</label>
+        <div class="col-md-3">
+            <input id="datetimepicker" class="form-control form-control-inline input-medium date-picker" size="16" type="text" value=""/>
+											<span class="help-block">
+											Select date </span>
+        </div>
     </div>
-
 </div>
+
+
 <!-- END PAGE CONTENT-->
 
 
 
 <include file="Public:FOOTER"/>
 
+<script>
+    $(function(){
+        $('#date-datetimepicker').datepicker({
+            language: 'zh-CN'
+        });
+    });
+
+
+</script>

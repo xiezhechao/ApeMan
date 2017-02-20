@@ -11,7 +11,7 @@ namespace Admin\Controller;
 
 use Think\Auth;
 use Think\Controller;
-use Think\Page;
+use Think\PageBackUp;
 use Org\Util\Input;
 
 class CommonController extends Controller {
@@ -99,7 +99,7 @@ class CommonController extends Controller {
             }
         }
         $count = $model->where($map)->count();
-        $page = new Page($count,$page_size);
+        $page = new PageBackUp($count,$page_size);
         $select = $model->field($fields)->where($map)->order($sort . ' ' . $order);
         if ($page_size) {
             $select->limit($page->firstRow . ',' . $page->listRows);

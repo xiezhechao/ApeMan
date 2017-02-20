@@ -4,6 +4,8 @@ var ComponentsPickers = function () {
 
         if (jQuery().datepicker) {
             $('.date-picker').datepicker({
+                language: "zh-CN",
+                format: "yyyy-mm-dd",
                 rtl: Metronic.isRTL(),
                 orientation: "left",
                 autoclose: true
@@ -50,12 +52,12 @@ var ComponentsPickers = function () {
 
         $('#defaultrange').daterangepicker({
                 opens: (Metronic.isRTL() ? 'left' : 'right'),
-                format: 'MM/DD/YYYY',
+                format: 'YYYY-MM-DD',
                 separator: ' to ',
                 startDate: moment().subtract('days', 29),
                 endDate: moment(),
-                minDate: '01/01/2012',
-                maxDate: '12/31/2018',
+                minDate: '2012-01-01',
+                maxDate: '2018-12-31',
             },
             function (start, end) {
                 $('#defaultrange input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -64,12 +66,12 @@ var ComponentsPickers = function () {
 
         $('#defaultrange_modal').daterangepicker({
                 opens: (Metronic.isRTL() ? 'left' : 'right'),
-                format: 'MM/DD/YYYY',
+                format: 'YYYY-MM-DD',
                 separator: ' to ',
                 startDate: moment().subtract('days', 29),
                 endDate: moment(),
-                minDate: '01/01/2012',
-                maxDate: '12/31/2018',
+                minDate: '2012-01-01',
+                maxDate: '2018-12-31',
             },
             function (start, end) {
                 $('#defaultrange_modal input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -136,15 +138,17 @@ var ComponentsPickers = function () {
         }
 
         $(".form_datetime").datetimepicker({
+            language: "zh-CN",
             autoclose: true,
             isRTL: Metronic.isRTL(),
-            format: "dd MM yyyy - hh:ii",
+            format: "yyyy MM dd - hh:ii",
             pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left")
         });
 
         $(".form_advance_datetime").datetimepicker({
+            language: "zh-CN",
             isRTL: Metronic.isRTL(),
-            format: "dd MM yyyy - hh:ii",
+            format: "yyyy MM dd - hh:ii",
             autoclose: true,
             todayBtn: true,
             startDate: "2013-02-14 10:00",
@@ -153,8 +157,9 @@ var ComponentsPickers = function () {
         });
 
         $(".form_meridian_datetime").datetimepicker({
+            language: "zh-CN",
             isRTL: Metronic.isRTL(),
-            format: "dd MM yyyy - HH:ii P",
+            format: "yyyy MM dd - HH:ii P",
             showMeridian: true,
             autoclose: true,
             pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),

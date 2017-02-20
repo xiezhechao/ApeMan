@@ -6,16 +6,19 @@
         <!-- BEGIN SAMPLE TABLE PORTLET-->
 
         <form action="{:U('Attendance/importExcel')}" method="post" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-md-3">
+            <div class="row fileupload-buttonbar">
+                <div class="col-lg-7">
                     <span class="btn green fileinput-button">
                         <i class="fa fa-plus"></i>
-                        <span>Add files... </span>
+                        <span>添加文件... </span>
                         <input class="form-control" type="file" name="excel"/>
                     </span>
-                </div>
-                <div class="col-md-3">
-                    <input type="submit" class="btn green" value="导入"/>
+
+                    <button type="submit" class="btn blue start">
+                        <i class="fa fa-upload"></i>
+                        <span>导入 </span>
+                    </button>
+
                 </div>
             </div>
         </form>
@@ -45,15 +48,15 @@
                 <form role="form" action="{:U('Attendance/index')}" method="post">
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+                            <div class="input-group input-md date-picker input-daterange" data-date="2017-02-16">
                                 <input type="text" class="form-control" name="from" placeholder="开始日期" value="{$reback.from}">
-                                            <span class="input-group-addon">to </span>
+                                            <span class="input-group-addon">至 </span>
                                 <input type="text" class="form-control" name="to" placeholder="结束日期" value="{$reback.to}">
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <select class="form-control input-medium" name="user">
+                            <select class="form-control input-md selectpicker" name="user">
                                 <option value="0">选择</option>
                                 <volist name="users" id="vo">
                                     <option value="{$vo.number}" <if condition="$reback['user'] eq $vo['number']">selected="selected"</if> >{$vo.name}</option>
@@ -62,7 +65,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <input type="text" name="userName" class="form-control" placeholder="姓名" value="{$reback.userName}">
+                            <input type="text" name="userName" class="form-control input-md" placeholder="姓名" value="{$reback.userName}">
                         </div>
 
                         <div class="col-md-2">
@@ -78,15 +81,25 @@
                         <th>姓名</th>
                         <th>上班时间</th>
                         <th>下班时间</th>
-                        <th>状态</th>
-                        <th>加班小时数</th>
+                        <th>加班时长</th>
+                        <th>节假日</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>加班总时长: {$total.hours} 小时</td>
-                        <td>迟到次数: {$late} 次</td>
-                        <td>迟到扣款: {$dedu} 元</td>
+                        <td colspan="2">加班总时长: <span class="text-primary"> {:formatNum($total_overtime_hours)} </span> 小时</td>
+                        <td colspan="2">迟到次数:
+                            <?php
+                                if ($total_late_count) {
+                                    echo ' <span class="text-danger">'.$total_late_count.'</span> 次';
+                                } else {
+                                    echo "<span style='color:green;'> 全勤 </span>";
+                                }
+
+                            ?>
+                        </td>
+                        <td colspan="2">迟到扣款: {$dedu} 元</td>
+                        <td colspan="2"></td>
                     </tr>
                     <volist name="list" id="vo">
                         <tr data-pid="{$vo.pid}" data-id="{$vo.id}">
@@ -95,12 +108,17 @@
                             <td>{$vo.name}</td>
                             <td><if condition="$vo.start_time eq 0"><span style="color:red;">未打卡</span><else/>{$vo.start_time|date='H:i:s',###}</if></td>
                             <td><if condition="$vo.end_time eq 0"><span style="color:red;">未打卡</span><else/>{$vo.end_time|date='H:i:s',###}</if></td>
-                            <td>{$vo.status}</td>
-                            <td>{$vo.overtimeHours}</td>
+                            <td>{:formatNum($vo['overtime_hours'])}</td>
+                            <td>{$vo.holiday_name}</td>
                         </tr>
                         <if></if>
                     </volist>
                     </tbody>
+                    <tfoot>
+                    <tr>
+                        <td id="td_colspan">{$page}</td>
+                    </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -115,4 +133,3 @@
 
 
 <include file="Public:FOOTER"/>
-
