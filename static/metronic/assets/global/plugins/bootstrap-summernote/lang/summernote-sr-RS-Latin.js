@@ -5,9 +5,9 @@
         bold: 'Podebljano',
         italic: 'Kurziv',
         underline: 'Podvučeno',
-        strikethrough: 'Precrtano',
         clear: 'Ukloni stilove fonta',
         height: 'Visina linije',
+        strikethrough: 'Precrtano',
         size: 'Veličina fonta'
       },
       image: {
@@ -24,6 +24,13 @@
         url: 'Adresa slike',
         remove: 'Ukloni sliku'
       },
+      video: {
+        video: 'Video',
+        videoLink: 'Veza ka videu',
+        insert: 'Umetni video',
+        url: 'URL video',
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion ili Youku)'
+      },
       link: {
         link: 'Veza',
         insert: 'Umetni vezu',
@@ -32,13 +39,6 @@
         textToDisplay: 'Tekst za prikaz',
         url: 'Internet adresa',
         openInNewWindow: 'Otvori u novom prozoru'
-      },
-      video: {
-        video: 'Video',
-        videoLink: 'Veza ka videu',
-        insert: 'Umetni video',
-        url: 'URL video',
-        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion ili Youku)'
       },
       table: {
         table: 'Tabela'

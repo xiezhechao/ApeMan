@@ -1,0 +1,185 @@
+<include file="Public:HEAD"/>
+<!-- BEGIN PAGE CONTENT-->
+<div class="row">
+    <div class="col-md-12">
+
+        <form action="{:U('Attendance/importExcel')}" method="post" enctype="multipart/form-data">
+            <div class="row fileupload-buttonbar">
+                <div class="col-lg-7">
+                    <span class="btn green fileinput-button" data-target="#config-manage" data-toggle="modal">
+                        <i class="fa fa-plus"></i>
+                        <span>添加配置... </span>
+                        <input class="form-control" type="button" name="excel"/>
+                    </span>
+                </div>
+            </div>
+        </form>
+        <p/>
+
+        <!-- BEGIN SAMPLE TABLE PORTLET-->
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>配置文件管理
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse">
+                    </a>
+                    <a href="javascript:;" data-target="#user-manage" data-toggle="modal" class="config" onclick="$('#modal-status').val('add');">
+                    </a>
+                    <a href="javascript:;" class="reload">
+                    </a>
+                    <a href="" class="fullscreen">
+                    </a>
+                    <a href="javascript:;" class="remove">
+                    </a>
+                </div>
+            </div>
+
+            <div class="portlet-body">
+                <form id="form1" action="" method="post">
+                    <a id="openEditor" href="sublime://"></a>
+                    <table class="table table-hover table-striped table_thead_fixed">
+                        <empty name="configList">
+                            <tr><td>{:L('EMPTY_TPL_DATA')}</td></tr>
+                            <else/>
+                            <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>名称</th>
+                                <th>路径</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tdboy>
+                                <volist name="configList" id="vo">
+                                    <tr>
+                                        <td>{$vo.id}</td>
+                                        <td><a href="javascript:;" data-target="#user-manage" data-toggle="modal" onclick="$('#modal-status').val('update');">{$vo.name}</a></td>
+                                        <td><a id="path" href="javascript:writeToBat(this)" data="{$vo.path}">{$vo.path}</a></td>
+                                        <td>
+                                            <if condition="$vo['status'] eq 1">
+                                                <i class="fa fa-check tooltips text-success"></i>
+                                            <else/>
+                                                <i class="fa fa-close tooltips text-danger"></i>
+                                            </if>
+                                        </td>
+                                    </tr>
+                                </volist>
+                            </tdboy>
+                            <tfoot>
+                            <tr>
+                                <td id="td_colspan">{$page}</td>
+                            </tr>
+                            </tfoot>
+                        </empty>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <!-- END SAMPLE TABLE PORTLET-->
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+
+<input type="hidden" id="modal-status" value="add"/>
+<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+<div class="modal fade" id="config-manage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">添加配置</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{:U('System/addConfig')}" method="post" ></form>
+                <div class="form-group">
+                    <label class="control-label col-md-3">Default1</label>
+                    <div class="col-md-3">
+                        <div class="fileinput" data-provides="fileinput">
+                            <div class="input-group input-large">
+                                <div class="form-control uneditable-input input-fixed input-medium"
+                                     data-trigger="fileinput">
+                                    <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                    <span class="fileinput-filename"> </span>
+                                </div>
+                                <span class="input-group-addon btn default btn-file">
+                                                                <span class="fileinput-new"> Select file </span>
+                                                                <span class="fileinput-exists"> Change </span>
+                                                                <input type="file" name="..."> </span>
+                                <a href="javascript:;"
+                                   class="input-group-addon btn red fileinput-exists"
+                                   data-dismiss="fileinput"> Remove </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3">Default1</label>
+                    <div class="col-md-3">
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="input-group input-large">
+                                <div class="form-control uneditable-input input-fixed input-medium"
+                                     data-trigger="fileinput">
+                                    <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                    <span class="fileinput-filename"> </span>
+                                </div>
+                                <span class="input-group-addon btn default btn-file">
+                                                                <span class="fileinput-new"> Select file </span>
+                                                                <span class="fileinput-exists"> Change </span>
+                                                                <input type="file" name="..."> </span>
+                                <a href="javascript:;"
+                                   class="input-group-addon btn red fileinput-exists"
+                                   data-dismiss="fileinput"> Remove </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue">保存</button>
+                <button type="button" class="btn default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+
+<include file="Public:FOOTER"/>
+
+<script>
+
+    $(function(){
+        $('#user-manage').on('show.bs.modal', function (e) {
+            var modal_status = $("#modal-status").val();
+            switch (modal_status) {
+                case "save" :
+
+                    break;
+
+                case "update" :
+
+                    break;
+            }
+
+        })
+    });
+
+    function writeToBat () {
+        var path = $('#path').attr('data');
+        $.ajax({
+            'url'           :   '{:U("System/writeToBat")}',
+            'data'          :   {'path':path},
+            'type'          :   'POST',
+            'dataType'      :   'JSON',
+            'success'       :   function (result) {
+                document.getElementById('openEditor').click();
+            }
+        });
+    }
+
+</script>

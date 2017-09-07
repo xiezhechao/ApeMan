@@ -1,4 +1,4 @@
-<include file="Public:HEAD"/>
+<include file="Public:head"/>
 <!-- BEGIN PAGE CONTENT-->
 
 <div class="row">
@@ -56,7 +56,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <select class="form-control input-md selectpicker" name="user">
+                            <select class="form-control input-medium bs-select" data-live-search="true" name="user">
                                 <option value="0">选择</option>
                                 <volist name="users" id="vo">
                                     <option value="{$vo.number}" <if condition="$reback['user'] eq $vo['number']">selected="selected"</if> >{$vo.name}</option>
@@ -132,4 +132,4 @@
 
 
 
-<include file="Public:FOOTER"/>
+<include file="Public:footer"/>

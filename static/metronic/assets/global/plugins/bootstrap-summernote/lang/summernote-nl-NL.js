@@ -5,10 +5,10 @@
         bold: 'Vet',
         italic: 'Cursief',
         underline: 'Onderstrepen',
-        strikethrough: 'Doorhalen',
         clear: 'Stijl verwijderen',
         height: 'Regelhoogte',
         name: 'Lettertype',
+        strikethrough: 'Doorhalen',
         size: 'Tekstgrootte'
       },
       image: {
@@ -25,6 +25,13 @@
         url: 'URL van de afbeelding',
         remove: 'Verwijder afbeelding'
       },
+      video: {
+        video: 'Video',
+        videoLink: 'Video link',
+        insert: 'Video invoegen',
+        url: 'URL van de video',
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion of Youku)'
+      },
       link: {
         link: 'Link',
         insert: 'Link invoegen',
@@ -33,13 +40,6 @@
         textToDisplay: 'Tekst van link',
         url: 'Naar welke URL moet deze link verwijzen?',
         openInNewWindow: 'Open in nieuw venster'
-      },
-      video: {
-        video: 'Video',
-        videoLink: 'Video link',
-        insert: 'Video invoegen',
-        url: 'URL van de video',
-        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion of Youku)'
       },
       table: {
         table: 'Tabel'

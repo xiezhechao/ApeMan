@@ -1,5 +1,4 @@
 .idea/
-ApeMan.iml
-/data/config/
-/data/runtime/
-/app/Admin/Conf/
+apeman.iml
+data/runtime/
+

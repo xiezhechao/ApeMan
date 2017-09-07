@@ -38,12 +38,15 @@ function sidebar () {
             $first_class[] = in_array($vo['id'],$parentsId) ? 'active open' : '';
             $first_class = join(' ',$first_class);
             $sec_class = array();
-            $sec_class[] = count(menu($vo['id'],$vo['menu_type'])) > 0 ? 'arrow' : '';
+            $sub = count(menu($vo['id'],$vo['menu_type']));
+            $sec_class[] = $sub > 0 ? 'arrow' : '';
             $sec_class[] = $rule == $vo['name'] ? 'open' : '';
             $sec_class = join(' ',$sec_class);
             $select_span = $rule == $vo['name'] ? '<span class="selected"></span>' : '';
             $href = $vo['name'] ? U($vo['name']) : 'javascript:;';
-            $sidebar .= '<li class="'.$first_class.'"><a href="'.$href.'"><i class="'.$vo['icon'].'"></i><span class="title">'.$vo['title'].'</span>'.$select_span.'<span class="'.$sec_class.'"></span></a>';
+            $href_class = 'nav-link ';
+            $href_class .= $sub > 0 ? ' nav-toggle' : '';
+            $sidebar .= '<li class="nav-item '.$first_class.'"><a href="'.$href.'" class="'.$href_class.'"><i class="'.$vo['icon'].'"></i><span class="title">'.$vo['title'].'</span>'.$select_span.'<span class="'.$sec_class.'"></span></a>';
             $sidebar = subMenu($vo['id'],$vo['menu_type'],$parentsId, $sidebar);
             $sidebar .= '</li>';
         }
@@ -62,10 +65,12 @@ function subMenu ($pid, $menu_type, $parentsId, $sidebar) {
             $active_class = in_array($vo['id'], $parentsId) ? 'active' : '';
             $href = $vo['name'] ? U($vo['name']) : 'javascript:;';
             $sub = menu($vo['id'],$vo['menu_type']);
+            $href_class = 'nav-link ';
+            $href_class .= count($sub) > 0 ? ' nav-toggle' : '';
             $arrow = count($sub) > 0 ? 'arrow' : '';
             $open = in_array($vo['id'], $parentsId) ? ' open ' : '';
             $icon = $vo['icon'];
-            $sidebar .= '<li class="'.$active_class.'"><a href="'.$href.'"><i class="'.$icon.'"></i>'.$vo['title'].'<span class="'.$arrow.$open.'"></span></a>';
+            $sidebar .= '<li class="nav-item '.$active_class.'"><a href="'.$href.'" class="'.$href_class.'"><i class="'.$icon.'"></i>'.$vo['title'].'<span class="'.$arrow.$open.'"></span></a>';
             $sidebar = subMenu($vo['id'] ,$menu_type, $parentsId ,$sidebar);
             $sidebar .= '</li>';
         }

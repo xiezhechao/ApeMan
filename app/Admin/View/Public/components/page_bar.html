@@ -1,0 +1,28 @@
+<!-- BEGIN PAGE BAR -->
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="{:U('Admin/Index/index')}">首页</a>
+            <if condition="count($page_header) GT 0">
+                <i class="fa fa-angle-right"></i>
+            </if>
+        </li>
+        <volist name="page_header" id="vo">
+            <li>
+                <a href="{$vo.name}">{$vo.title}</a>
+                <if condition="$i NEQ count($page_header)">
+                    <i class="fa fa-angle-right"></i>
+                </if>
+            </li>
+        </volist>
+    </ul>
+    <div class="page-toolbar">
+        <div id="dashboard-report-range" class="pull-right tooltips btn btn-sm" data-container="body"
+             data-placement="bottom" data-original-title="改变仪表板日期范围">
+            <i class="icon-calendar"></i>&nbsp;
+            <span class="thin uppercase hidden-xs"></span>&nbsp;
+            <i class="fa fa-angle-down"></i>
+        </div>
+    </div>
+</div>
+<!-- END PAGE BAR -->

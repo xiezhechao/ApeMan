@@ -5,9 +5,10 @@
         bold: 'Negrito',
         italic: 'Itálico',
         underline: 'Sublinhado',
-        strikethrough: 'Riscado',
         clear: 'Remover estilo da fonte',
         height: 'Altura da linha',
+        name: 'Fonte',
+        strikethrough: 'Riscado',
         size: 'Tamanho da fonte'
       },
       image: {
@@ -23,6 +24,13 @@
         selectFromFiles: 'Selecione a partir dos arquivos',
         url: 'URL da image'
       },
+      video: {
+        video: 'Vídeo',
+        videoLink: 'Link para vídeo',
+        insert: 'Inserir vídeo',
+        url: 'URL do vídeo?',
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion, ou Youku)'
+      },
       link: {
         link: 'Link',
         insert: 'Inserir link',
@@ -30,14 +38,7 @@
         edit: 'Editar',
         textToDisplay: 'Texto para exibir',
         url: 'Para qual URL esse link leva?',
-	    	openInNewWindow: 'Abrir em uma nova janela'
-      },
-      video: {
-        video: 'Vídeo',
-        videoLink: 'Link para vídeo',
-        insert: 'Inserir vídeo',
-        url: 'URL do vídeo?',
-        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion, ou Youku)'
+        openInNewWindow: 'Abrir em uma nova janela'
       },
       table: {
         table: 'Tabela'
