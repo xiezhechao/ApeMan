@@ -2,50 +2,32 @@
 <!-- BEGIN PAGE CONTENT-->
 <div class="row">
     <div class="col-md-12">
-
-        <form action="{:U('Attendance/importExcel')}" method="post" enctype="multipart/form-data">
-            <div class="row fileupload-buttonbar">
-                <div class="col-lg-7">
-                    <span class="btn green fileinput-button" data-target="#config-manage" data-toggle="modal">
-                        <i class="fa fa-plus"></i>
-                        <span>添加配置... </span>
-                        <input class="form-control" type="button" name="excel"/>
-                    </span>
-                </div>
-            </div>
-        </form>
-        <p/>
-
         <!-- BEGIN SAMPLE TABLE PORTLET-->
-        <div class="portlet box blue">
+        <form action="{:U('Attendance/importExcel')}" method="post" enctype="multipart/form-data">
+        <div class="portlet portlet-sortable box blue">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-cogs"></i>配置文件管理
+                    <i class="fa fa-file-text-o"></i>
+                    <span class="caption-subject bold uppercase">配置文件管理</span>
                 </div>
-                <div class="tools">
-                    <a href="javascript:;" class="collapse">
+                <div class="actions">
+                    <a href="javascript:;" class="btn btn-default btn-sm">
+                        <i class="fa fa-plus"></i>
+                        <span> 添加 </span>
                     </a>
-                    <a href="javascript:;" data-target="#user-manage" data-toggle="modal" class="config" onclick="$('#modal-status').val('add');">
-                    </a>
-                    <a href="javascript:;" class="reload">
-                    </a>
-                    <a href="" class="fullscreen">
-                    </a>
-                    <a href="javascript:;" class="remove">
-                    </a>
+                    <a class="btn btn-sm btn-icon-only btn-default fullscreen" href="javascript:;"></a>
                 </div>
             </div>
-
             <div class="portlet-body">
                 <form id="form1" action="" method="post">
                     <a id="openEditor" href="sublime://"></a>
-                    <table class="table table-hover table-striped table_thead_fixed">
+                    <table class="table table-hover table-striped table_thead_fixed table-bordered">
                         <empty name="configList">
                             <tr><td>{:L('EMPTY_TPL_DATA')}</td></tr>
                             <else/>
                             <thead>
                             <tr>
-                                <th>编号</th>
+                                <th>#</th>
                                 <th>名称</th>
                                 <th>路径</th>
                                 <th>状态</th>
@@ -77,6 +59,7 @@
                 </form>
             </div>
         </div>
+        </form>
         <!-- END SAMPLE TABLE PORTLET-->
     </div>
 </div>

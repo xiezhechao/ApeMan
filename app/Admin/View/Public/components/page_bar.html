@@ -4,14 +4,14 @@
         <li>
             <a href="{:U('Admin/Index/index')}">首页</a>
             <if condition="count($page_header) GT 0">
-                <i class="fa fa-angle-right"></i>
+                <i class="fa fa-circle"></i>
             </if>
         </li>
         <volist name="page_header" id="vo">
             <li>
                 <a href="{$vo.name}">{$vo.title}</a>
                 <if condition="$i NEQ count($page_header)">
-                    <i class="fa fa-angle-right"></i>
+                    <i class="fa fa-circle"></i>
                 </if>
             </li>
         </volist>
