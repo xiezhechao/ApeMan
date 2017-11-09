@@ -1,4 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
+
+###apeman Project
+Conf/*
+
 ### Windows template
 # Windows thumbnail cache files
 Thumbs.db
